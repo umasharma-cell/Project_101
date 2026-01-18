@@ -44,4 +44,4 @@ lerna-debug.log*
 .eslintcache
 
 # Misc
-Thumbs.db
+Thumbs.db/backend/dist
