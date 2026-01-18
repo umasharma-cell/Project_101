@@ -1,0 +1,141 @@
+.expense-list {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-height: 400px;
+}
+
+.expense-list h2 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #999;
+}
+
+.empty-state p {
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.empty-state .subtitle {
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.expense-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.expense-table thead {
+  background: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.expense-table th {
+  padding: 1rem;
+  text-align: left;
+  color: #495057;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.expense-table th.amount-column {
+  text-align: right;
+}
+
+.expense-table tbody tr {
+  border-bottom: 1px solid #dee2e6;
+  transition: background-color 0.2s;
+}
+
+.expense-table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.expense-table td {
+  padding: 1rem;
+  color: #212529;
+}
+
+.expense-table td.amount-column {
+  text-align: right;
+  font-weight: 600;
+  color: #28a745;
+}
+
+.expense-table td.description {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.category-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.category-badge.category-food {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.category-badge.category-transport {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+
+.category-badge.category-entertainment {
+  background: #fce4ec;
+  color: #c2185b;
+}
+
+.category-badge.category-shopping {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.category-badge.category-bills {
+  background: #e0f2f1;
+  color: #00796b;
+}
+
+.category-badge.category-healthcare {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.category-badge.category-education {
+  background: #e1f5fe;
+  color: #0277bd;
+}
+
+.category-badge.category-travel {
+  background: #fff8e1;
+  color: #f9a825;
+}
