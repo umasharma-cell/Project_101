@@ -1,40 +1,275 @@
 .total-display {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.08),
+    rgba(255, 255, 255, 0.02));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+  animation: slideUp 0.6s ease-out;
+}
+
+/* Animated gradient border */
+.total-display::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    var(--accent-green),
+    transparent,
+    var(--accent-green)
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: borderGlow 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes borderGlow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+/* Floating particles effect */
+.total-display::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at 30% 70%,
+    rgba(52, 199, 89, 0.05) 0%,
+    transparent 40%
+  );
+  animation: float 20s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(-30px, -30px) rotate(120deg); }
+  66% { transform: translate(30px, -20px) rotate(240deg); }
 }
 
 .total-card {
   text-align: center;
-  padding: 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 8px;
-  color: white;
+  padding: 1.5rem;
+  position: relative;
+  z-index: 1;
 }
 
+/* Currency symbol animation */
 .total-label {
   font-size: 0.875rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 0.5rem;
-  opacity: 0.9;
+  letter-spacing: 0.15em;
+  margin-bottom: 1rem;
+  color: var(--gray-400);
+  font-weight: 600;
+  position: relative;
+  display: inline-block;
+  animation: fadeIn 0.6s ease-out 0.2s both;
 }
 
+.total-label::before {
+  content: '💰';
+  position: absolute;
+  left: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+.total-label::after {
+  content: '💰';
+  position: absolute;
+  right: -30px;
+  top: 50%;
+  transform: translateY(-50%) scaleX(-1);
+  font-size: 1.2rem;
+  animation: bounce 2s ease-in-out infinite 0.5s;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(-50%) scale(1); }
+  50% { transform: translateY(-60%) scale(1.1); }
+}
+
+/* Animated total amount */
 .total-amount {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  background: linear-gradient(
+    135deg,
+    var(--primary-white) 0%,
+    var(--accent-green) 50%,
+    var(--primary-white) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 3s ease-in-out infinite, countUp 0.6s ease-out 0.3s both;
+  font-variant-numeric: tabular-nums;
+  position: relative;
 }
 
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Sparkle effect on amount */
+.total-amount::before,
+.total-amount::after {
+  content: '✨';
+  position: absolute;
+  font-size: 1.5rem;
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+.total-amount::before {
+  top: -10px;
+  left: -20px;
+  animation-delay: 0s;
+}
+
+.total-amount::after {
+  bottom: -10px;
+  right: -20px;
+  animation-delay: 1s;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1) rotate(180deg);
+  }
+}
+
+/* Expense count */
 .expense-count {
-  font-size: 0.95rem;
-  opacity: 0.9;
+  font-size: 1rem;
+  color: var(--gray-400);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  animation: fadeIn 0.6s ease-out 0.4s both;
+  position: relative;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 30px;
+  display: inline-block;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all var(--transition-normal);
 }
 
+.expense-count:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+  color: var(--primary-white);
+}
+
+/* Pulse animation for new expense */
+@keyframes newExpensePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(52, 199, 89, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 20px rgba(52, 199, 89, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(52, 199, 89, 0);
+  }
+}
+
+.total-display.expense-added {
+  animation: newExpensePulse 0.8s ease-out;
+}
+
+/* Loading skeleton */
+.total-display.loading .total-amount {
+  background: linear-gradient(90deg,
+    var(--gray-700) 25%,
+    var(--gray-600) 50%,
+    var(--gray-700) 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Success animation */
+@keyframes success {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.total-display.success {
+  animation: success 0.5s ease-out;
+}
+
+/* Responsive design */
 @media (max-width: 768px) {
   .total-amount {
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
+
+  .total-label::before,
+  .total-label::after {
+    display: none;
+  }
+
+  .total-card {
+    padding: 1rem;
+  }
+}
+
+/* Hover effect for entire card */
+.total-display:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 60px rgba(52, 199, 89, 0.15);
+}
+
+.total-display:hover::before {
+  animation-duration: 1.5s;
+}
+
+/* Number ticker animation */
+@keyframes ticker {
+  0% { transform: translateY(100%); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-100%); opacity: 0; }
 }

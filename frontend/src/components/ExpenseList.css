@@ -1,86 +1,218 @@
 .expense-list {
-  background: white;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
   padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+  animation: slideUp 0.6s ease-out;
   min-height: 400px;
 }
 
-.expense-list h2 {
-  color: #333;
-  margin-bottom: 1.5rem;
-  font-size: 1.5rem;
+/* Gradient overlay */
+.expense-list::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.03),
+    transparent);
+  pointer-events: none;
 }
 
+.expense-list h2 {
+  color: var(--primary-white);
+  margin-bottom: 2rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  position: relative;
+}
+
+/* Loading state */
 .loading {
   text-align: center;
-  padding: 3rem;
-  color: #666;
-  font-size: 1.1rem;
+  padding: 4rem;
+  color: var(--gray-400);
+  font-size: 1.125rem;
+  animation: pulse 1.5s ease-in-out infinite;
+  position: relative;
 }
 
+.loading::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border: 3px solid var(--gray-700);
+  border-top-color: var(--primary-white);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Empty state */
 .empty-state {
   text-align: center;
-  padding: 3rem;
-  color: #999;
+  padding: 4rem;
+  color: var(--gray-500);
+  position: relative;
 }
 
 .empty-state p {
   margin-bottom: 0.5rem;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  animation: fadeIn 0.6s ease-out;
 }
 
 .empty-state .subtitle {
-  font-size: 0.9rem;
-  color: #aaa;
+  font-size: 1rem;
+  color: var(--gray-600);
+  animation: fadeIn 0.6s ease-out 0.1s both;
 }
 
+.empty-state::before {
+  content: '📊';
+  display: block;
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+  animation: bounceIn 0.8s ease-out;
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 0.5; }
+}
+
+/* Table container */
 .table-container {
   overflow-x: auto;
+  margin: -0.5rem;
+  padding: 0.5rem;
 }
 
+/* Modern table design */
 .expense-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+  position: relative;
 }
 
 .expense-table thead {
-  background: #f8f9fa;
-  border-bottom: 2px solid #dee2e6;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.expense-table thead::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  z-index: -1;
 }
 
 .expense-table th {
-  padding: 1rem;
+  padding: 1.25rem 1rem;
   text-align: left;
-  color: #495057;
+  color: var(--gray-400);
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid var(--glass-border);
+  position: relative;
+}
+
+.expense-table th::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--primary-white);
+  transition: width var(--transition-normal);
+}
+
+.expense-table th:hover::after {
+  width: 100%;
 }
 
 .expense-table th.amount-column {
   text-align: right;
 }
 
+/* Table rows with hover effect */
 .expense-table tbody tr {
-  border-bottom: 1px solid #dee2e6;
-  transition: background-color 0.2s;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all var(--transition-normal);
+  position: relative;
+  animation: slideUp 0.4s ease-out;
+  animation-fill-mode: both;
+}
+
+.expense-table tbody tr::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(255, 255, 255, 0.02),
+    transparent);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  pointer-events: none;
 }
 
 .expense-table tbody tr:hover {
-  background: #f8f9fa;
+  background: rgba(255, 255, 255, 0.03);
+  transform: translateX(4px);
 }
 
+.expense-table tbody tr:hover::before {
+  opacity: 1;
+}
+
+/* Stagger animation for rows */
+.expense-table tbody tr:nth-child(1) { animation-delay: 0.05s; }
+.expense-table tbody tr:nth-child(2) { animation-delay: 0.1s; }
+.expense-table tbody tr:nth-child(3) { animation-delay: 0.15s; }
+.expense-table tbody tr:nth-child(4) { animation-delay: 0.2s; }
+.expense-table tbody tr:nth-child(5) { animation-delay: 0.25s; }
+
 .expense-table td {
-  padding: 1rem;
-  color: #212529;
+  padding: 1.25rem 1rem;
+  color: var(--gray-200);
+  font-size: 0.95rem;
+  position: relative;
 }
 
 .expense-table td.amount-column {
   text-align: right;
   font-weight: 600;
-  color: #28a745;
+  font-size: 1.05rem;
+  color: var(--accent-green);
+  font-variant-numeric: tabular-nums;
 }
 
 .expense-table td.description {
@@ -88,54 +220,120 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: var(--gray-300);
 }
 
+/* Modern category badges */
 .category-badge {
   display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border-radius: 12px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  background: #e3f2fd;
-  color: #1976d2;
+  padding: 0.375rem 0.875rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--primary-white);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
 }
 
+.category-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent);
+  transition: left 0.5s ease;
+}
+
+.category-badge:hover::before {
+  left: 100%;
+}
+
+.category-badge:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}
+
+/* Category-specific colors with gradient overlays */
 .category-badge.category-food {
-  background: #fff3e0;
-  color: #f57c00;
+  background: linear-gradient(135deg, #ff9500, #ff7a00);
+  border-color: #ff9500;
 }
 
 .category-badge.category-transport {
-  background: #e8f5e9;
-  color: #388e3c;
+  background: linear-gradient(135deg, #30d158, #28c150);
+  border-color: #30d158;
 }
 
 .category-badge.category-entertainment {
-  background: #fce4ec;
-  color: #c2185b;
+  background: linear-gradient(135deg, #bf5af2, #ac44cf);
+  border-color: #bf5af2;
 }
 
 .category-badge.category-shopping {
-  background: #f3e5f5;
-  color: #7b1fa2;
+  background: linear-gradient(135deg, #5e5ce6, #4b4acf);
+  border-color: #5e5ce6;
 }
 
 .category-badge.category-bills {
-  background: #e0f2f1;
-  color: #00796b;
+  background: linear-gradient(135deg, #64d2ff, #5ac8fa);
+  border-color: #64d2ff;
 }
 
 .category-badge.category-healthcare {
-  background: #ffebee;
-  color: #c62828;
+  background: linear-gradient(135deg, #ff375f, #ff2d55);
+  border-color: #ff375f;
 }
 
 .category-badge.category-education {
-  background: #e1f5fe;
-  color: #0277bd;
+  background: linear-gradient(135deg, #0a84ff, #007aff);
+  border-color: #0a84ff;
 }
 
 .category-badge.category-travel {
-  background: #fff8e1;
-  color: #f9a825;
+  background: linear-gradient(135deg, #ffd60a, #ffcc00);
+  border-color: #ffd60a;
+  color: var(--primary-black);
+}
+
+.category-badge.category-other {
+  background: linear-gradient(135deg, var(--gray-600), var(--gray-700));
+  border-color: var(--gray-600);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .expense-list {
+    padding: 1.5rem 1rem;
+  }
+
+  .expense-table {
+    font-size: 0.875rem;
+  }
+
+  .expense-table th,
+  .expense-table td {
+    padding: 1rem 0.75rem;
+  }
+
+  .category-badge {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.625rem;
+  }
+}
+
+/* Date column animation */
+.expense-table td:first-child {
+  font-variant-numeric: tabular-nums;
+  color: var(--gray-400);
+  font-weight: 500;
 }
