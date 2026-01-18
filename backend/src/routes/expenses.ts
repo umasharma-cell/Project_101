@@ -5,15 +5,16 @@ import { CreateExpenseDTO, ExpenseQueryParams } from '../types/expense';
 const router = Router();
 
 // POST /api/expenses - Create a new expense
-router.post('/expenses', async (req: Request, res: Response, next: NextFunction) => {
+router.post('/expenses', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const expenseData: CreateExpenseDTO = req.body;
 
     // Validate date format
     if (expenseData.date && !ExpenseModel.isValidDate(expenseData.date)) {
-      return res.status(400).json({
+      res.status(400).json({
         error: 'Invalid date format. Use YYYY-MM-DD'
       });
+      return;
     }
 
     // Create expense (handles idempotency internally)
@@ -24,7 +25,8 @@ router.post('/expenses', async (req: Request, res: Response, next: NextFunction)
     // Handle validation errors
     if (error.message.includes('must be greater than zero') ||
         error.message.includes('are required')) {
-      return res.status(400).json({ error: error.message });
+      res.status(400).json({ error: error.message });
+      return;
     }
 
     // Pass other errors to error handler
@@ -33,7 +35,7 @@ router.post('/expenses', async (req: Request, res: Response, next: NextFunction)
 });
 
 // GET /api/expenses - Get all expenses with optional filters
-router.get('/expenses', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/expenses', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const queryParams: ExpenseQueryParams = {
       category: req.query.category as string,
@@ -42,9 +44,10 @@ router.get('/expenses', async (req: Request, res: Response, next: NextFunction) 
 
     // Validate sort parameter
     if (queryParams.sort && !['date_desc', 'date_asc'].includes(queryParams.sort)) {
-      return res.status(400).json({
+      res.status(400).json({
         error: 'Invalid sort parameter. Use date_desc or date_asc'
       });
+      return;
     }
 
     const expenses = await ExpenseModel.findAll(queryParams);
@@ -56,7 +59,7 @@ router.get('/expenses', async (req: Request, res: Response, next: NextFunction) 
 });
 
 // GET /api/expenses/stats - Get expense statistics (optional endpoint)
-router.get('/expenses/stats', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/expenses/stats', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const queryParams: ExpenseQueryParams = {
       category: req.query.category as string
@@ -71,12 +74,13 @@ router.get('/expenses/stats', async (req: Request, res: Response, next: NextFunc
 });
 
 // GET /api/expenses/:id - Get single expense by ID
-router.get('/expenses/:id', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/expenses/:id', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const expense = await ExpenseModel.findById(req.params.id);
 
     if (!expense) {
-      return res.status(404).json({ error: 'Expense not found' });
+      res.status(404).json({ error: 'Expense not found' });
+      return;
     }
 
     res.json(expense);

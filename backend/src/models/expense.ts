@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { db, runQuery, runInsert } from '../db';
+import { runQuery, runInsert } from '../db';
 import { Expense, CreateExpenseDTO, ExpenseQueryParams } from '../types/expense';
 
 export class ExpenseModel {
