@@ -121,11 +121,36 @@ CREATE TABLE expenses (
 
 ## Key Design Decisions
 
-1. **SQLite Database**: Chosen for simplicity, portability, and sufficient for single-user application
-2. **Money as Cents**: Stored as integers to avoid floating-point errors
-3. **Client-Generated UUIDs**: Enables idempotent POST requests
-4. **TypeScript**: Provides type safety, especially important for financial data
-5. **Responsive Design**: Works on both mobile and desktop devices
+1. **SQLite Database**: Chosen for simplicity, portability, and sufficient for single-user application. File-based storage eliminates the need for database server setup.
+2. **Money as Cents**: Stored as integers in the database to avoid floating-point arithmetic errors. Converted to/from dollars at the API boundary.
+3. **Client-Generated UUIDs**: Frontend generates IDs before sending to backend, enabling true idempotency. Same request can be safely retried without creating duplicates.
+4. **TypeScript**: Provides compile-time type safety for both frontend and backend, especially critical for financial data handling.
+5. **Monorepo Structure**: Backend and frontend in same repository for easier development and deployment coordination.
+6. **No Authentication**: Single-user application assumption allowed us to skip auth complexity and focus on core functionality.
+
+## Trade-offs Made Due to Time Constraints
+
+1. **Basic Styling Over Polished UI**: Used simple CSS instead of a component library (like Material-UI) to save setup time. The UI is functional but not highly polished.
+2. **No Automated Tests**: Focused on core functionality over test coverage. In production, would add unit tests for money handling and integration tests for API.
+3. **Simple Error Messages**: Generic error messages instead of detailed, user-friendly error explanations for each scenario.
+4. **No Data Pagination**: Loading all expenses at once. For large datasets, would implement pagination or virtualization.
+5. **Limited Input Validation**: Basic validation only (e.g., positive amounts). Could add more sophisticated validation like date range limits.
+6. **No Caching Strategy**: Frontend fetches data on every filter change. Could implement caching to reduce API calls.
+
+## Intentionally Not Implemented
+
+These features were consciously excluded to maintain focus on core requirements:
+
+1. **User Authentication & Authorization**: Assignment specified single-user, so no login system
+2. **Expense Editing/Deletion**: Not in requirements, kept scope to create and read only
+3. **Advanced Analytics**: No charts, graphs, or detailed breakdowns beyond simple total
+4. **Export Functionality**: No CSV/PDF export as it wasn't required
+5. **Expense Attachments**: No receipt uploads or file attachments
+6. **Recurring Expenses**: No support for automated recurring entries
+7. **Budget Management**: No budget setting or tracking against limits
+8. **Multi-currency Support**: Only INR support, no currency conversion
+9. **Offline Mode**: No service worker or offline capability
+10. **Real-time Updates**: No WebSocket for multi-tab synchronization
 
 ## Production Deployment
 
